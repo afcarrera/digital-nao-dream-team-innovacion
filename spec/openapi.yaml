@@ -1,0 +1,233 @@
+openapi: 3.0.3
+info:
+  title: Swagger Scopus Search - OpenAPI 3.0
+  description: |-
+    This is a sample Scopus Server based on the OpenAPI 3.0 specification.  You can find out more about
+    Swagger at [https://swagger.io](https://swagger.io).
+
+    Some useful links:
+    - [The source API definition for the Scopus Search](https://github.com/afcarrera/digital-nao-dream-team-innovacion/tree/main/spec/openapi.yaml)
+    - [Scopus search guide](https://dev.elsevier.com/sc_search_tips.html)
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: apiteam@swagger.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: https://api.elsevier.com
+tags:
+  - name: scopus
+    description: Operations about scopus
+paths:
+  /content/search/scopus:
+    get:
+      tags:
+        - scopus
+      summary: Search scopus abstracts by query
+      description: This represents a search against the SCOPUS cluster, which contains SCOPUS abstracts
+      operationId: searchScopus
+      parameters:
+        - name: query
+          in: query
+          description: This represents the boolean search to be executed against the SCOPUS cluster.
+          required: true
+          schema:
+            type: string
+        - name: apiKey
+          in: query
+          description: This represents a unique application developer key providing access to API resources
+          required: true
+          schema:
+            type: string
+        - name: access_token
+          in: query
+          description: Specification for active session, secured authtoken
+          schema:
+            type: string
+        - name: httpAccept
+          in: query
+          description: Requested content type, overrides HTTP header value
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResults'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SearchResults'
+        '400':
+          description: Invalid request
+        '401':
+          description: Authentication error
+        '403':
+          description: Authentication error
+        '405':
+          description: Invalid method
+        '406':
+          description: Invalid mime type
+        '429':
+          description: Quota exceeded
+        '500':
+          description: Generic error
+
+components:
+  schemas:
+    Affiliation:
+      type: object
+      properties:
+        affilname:
+          type: string
+        affilname-city:
+          type: string
+        affilname-country:
+          type: string
+      xml:
+        name: affiliation
+    Entry:
+      type: object
+      properties:
+        link:
+          type: array
+          items:
+            $ref: '#/components/schemas/Link'
+        prism:url:
+          type: string
+        dc:identifier:
+          type: string
+        eid:
+          type: string
+        dc:title:
+          type: string
+        dc:creator:
+          type: string
+        prism:publicationName:
+          type: string
+        prism:issn:
+          type: string
+        prism:eIssn:
+          type: string
+        prism:volume:
+          type: string
+        prism:pageRange:
+          type: string
+        prism:coverDate:
+          type: string
+        prism:coverDisplayDate:
+          type: string
+        prism:doi:
+          type: string
+        citedby-count:
+          type: string
+        affiliation:
+          type: array
+          items:
+            $ref: '#/components/schemas/Affiliation'
+        prism:aggregationType:
+          type: string
+        subtype:
+          type: string
+        subtypeDescription:
+          type: string
+        source-id:
+          type: string
+        openaccess:
+          type: string
+        openaccessFlag:
+          type: boolean
+        freetoread:
+          type: object
+          properties:
+            value:
+              type: array
+              items:
+                $ref: '#/components/schemas/Value'
+              xml:
+                wrapped: false
+          xml:
+            wrapped: false
+        freetoreadLabel:
+          type: object
+          properties:
+            value:
+              type: array
+              items:
+                $ref: '#/components/schemas/Value'
+              xml:
+                wrapped: false
+          xml:
+            wrapped: false
+    Link:
+      type: object
+      properties:
+        '@ref':
+          type: string
+          xml:
+            attribute: true
+            name: ref
+        '@href':
+          type: string
+          xml:
+            attribute: true
+            name: href
+        '@type':
+          type: string
+          xml:
+            attribute: true
+            name: type
+    OpenSearchQuery:
+      type: object
+      properties:
+        '@role':
+          type: string
+          xml:
+            attribute: true
+            name: role
+        '@searchTerms':
+          type: string
+          xml:
+            attribute: true
+            name: searchTerms
+        '@startPage':
+          type: string   
+          xml:
+            attribute: true
+            name: startPage     
+      xml:
+        name: opensearch:Query
+    SearchResults:
+      type: object
+      properties:
+        opensearch:totalResults:
+          type: string
+        opensearch:startIndex:
+          type: string
+        opensearch:itemsPerPage:
+          type: string
+        opensearch:Query:
+          type: object
+          $ref: '#/components/schemas/OpenSearchQuery'
+        link:
+          type: array
+          items:
+            $ref: '#/components/schemas/Link'
+        entry:
+          type: object
+          $ref: '#/components/schemas/Entry'
+      xml:
+        name: search-results
+    Value:
+      type: object
+      properties:
+        '$':
+          type: string
+          xml:
+            name: value
