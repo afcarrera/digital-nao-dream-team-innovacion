@@ -93,7 +93,7 @@ components:
       xml:
         name: affiliation
     Entry:
-      type: array
+      type: object
       properties:
         link:
           type: array
@@ -152,8 +152,6 @@ components:
                 $ref: '#/components/schemas/Value'
               xml:
                 wrapped: false
-          xml:
-            wrapped: false
         freetoreadLabel:
           type: object
           properties:
@@ -222,8 +220,11 @@ components:
           items:
             $ref: '#/components/schemas/Link'
         entry:
-          type: object
-          $ref: '#/components/schemas/Entry'
+          type: array
+          items:
+            $ref: '#/components/schemas/Entry'
+          xml:
+            wrapped: false
       xml:
         name: search-results
     Value:
