@@ -8,6 +8,7 @@ info:
     Some useful links:
     - [The source API definition for the Scopus Search](https://github.com/afcarrera/digital-nao-dream-team-innovacion/tree/main/spec/openapi.yaml)
     - [Scopus search guide](https://dev.elsevier.com/sc_search_tips.html)
+    - [Api key settings](https://dev.elsevier.com/api_key_settings.html)
   termsOfService: http://swagger.io/terms/
   contact:
     email: apiteam@swagger.io
