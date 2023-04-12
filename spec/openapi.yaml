@@ -93,7 +93,7 @@ components:
       xml:
         name: affiliation
     Entry:
-      type: object
+      type: array
       properties:
         link:
           type: array
@@ -165,6 +165,8 @@ components:
                 wrapped: false
           xml:
             wrapped: false
+      xml:
+        wrapped: false
     Link:
       type: object
       properties:
