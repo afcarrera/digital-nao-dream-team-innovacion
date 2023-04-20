@@ -1,17 +1,17 @@
 openapi: 3.0.3
 info:
-  title: Swagger Scopus Search - OpenAPI 3.0
+  title: Swagger Google Scholar Search - OpenAPI 3.0
   description: |-
-    This is a sample Scopus Server based on the OpenAPI 3.0 specification.  You can find out more about
+    This is a sample Google Scholar Server based on the OpenAPI 3.0 specification.  You can find out more about
     Swagger at [https://swagger.io](https://swagger.io).
 
     Some useful links:
-    - [The source API definition for the Scopus Search](https://github.com/afcarrera/digital-nao-dream-team-innovacion/tree/main/spec/openapi.yaml)
-    - [Scopus search guide](https://dev.elsevier.com/sc_search_tips.html)
-    - [Api key settings](https://dev.elsevier.com/api_key_settings.html)
+    - [The source API definition for the Google Scholar Search](https://github.com/afcarrera/digital-nao-dream-team-innovacion/tree/main/spec/openapi.yaml)
+    - [Get api key to use this API](https://serpapi.com/manage-api-key)
+    - [Guide to find the author IDs](https://serpapi.com/google-scholar-profiles-api)
   termsOfService: http://swagger.io/terms/
   contact:
-    email: apiteam@swagger.io
+    email: afcarreral@gmail.com
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
@@ -20,39 +20,35 @@ externalDocs:
   description: Find out more about Swagger
   url: http://swagger.io
 servers:
-  - url: https://api.elsevier.com
+  - url: https://serpapi.com/search.json
 tags:
-  - name: scopus
-    description: Operations about scopus
+  - name: googleScholar
+    description: Operations about google scholar
 paths:
-  /content/search/scopus:
+  /:
     get:
       tags:
-        - scopus
-      summary: Search scopus abstracts by query
-      description: This represents a search against the SCOPUS cluster, which contains SCOPUS abstracts
-      operationId: searchScopus
+        - googleScholarAuthorById
+      summary: Search google scholar author by id
+      description: Allows you to scrape author results from the Google Scholar Author search page
+      operationId: googleScholarAuthorById
       parameters:
-        - name: query
+        - name: author_id
           in: query
-          description: This represents the boolean search to be executed against the SCOPUS cluster.
+          description: Parameter defines the ID of an author.
           required: true
           schema:
             type: string
-        - name: apiKey
+        - name: api_key
           in: query
-          description: This represents a unique application developer key providing access to API resources
+          description: Parameter defines the SerpApi private key to use.
           required: true
           schema:
             type: string
-        - name: access_token
+        - name: engine
           in: query
-          description: Specification for active session, secured authtoken
-          schema:
-            type: string
-        - name: httpAccept
-          in: query
-          description: Requested content type, overrides HTTP header value
+          description: Set parameter to google_scholar_author to use the Google Scholar Author API engine..
+          required: true
           schema:
             type: string
       responses:
@@ -61,177 +57,204 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SearchResults'
+                $ref: '#/components/schemas/SearchResult'
             application/xml:
               schema:
-                $ref: '#/components/schemas/SearchResults'
+                $ref: '#/components/schemas/SearchResult'
         '400':
-          description: Invalid request
+          description: Bad request
         '401':
-          description: Authentication error
-        '403':
-          description: Authentication error
-        '405':
-          description: Invalid method
-        '406':
-          description: Invalid mime type
-        '429':
-          description: Quota exceeded
-        '500':
-          description: Generic error
+          description: Unauthorized
+        '404':
+          description: Not Found
 
 components:
   schemas:
-    Affiliation:
+    Article:
       type: object
       properties:
-        affilname:
+        title:
           type: string
-        affilname-city:
+        link:
           type: string
-        affilname-country:
+        citation_id:
           type: string
-      xml:
-        name: affiliation
-    Entry:
+        authors:
+          type: string
+        publication:
+          type: string
+        cited_by:
+          type: object
+          $ref: '#/components/schemas/ArticleCitedBy'
+        year:
+          type: string
+    ArticleCitedBy:
       type: object
+      properties:
+        value:
+          type: integer
+        link:
+          type: string
+        serpapi_link:
+          type: string
+    Author:
+      type: object
+      properties:
+        name: 
+          type: string
+        affiliations:
+          type: string
+        email:
+          type: string
+        interests:
+          type: array
+          items:
+            $ref: '#/components/schemas/Interest'
+        thumbnail:
+          type: string
+    Citation:
+      type: object
+      properties:
+        citations:
+          type: object
+          $ref: '#/components/schemas/CitationInfo'
+    CitationInfo:
+      properties:
+        all:
+          type: integer
+        depuis_2016:
+          type: integer
+    CitedBy:
+      type: object
+      properties:
+        table:
+          type: array
+          items:
+            anyOf:
+              - $ref: '#/components/schemas/Citation'
+              - $ref: '#/components/schemas/IndiceH'
+              - $ref: '#/components/schemas/IndiceI10'
+        graph:
+          type: array
+          items:
+            $ref: '#/components/schemas/Graph'
+    CoAuthor:
+      type: object
+      properties:
+        name:
+            type: string
+        link:
+            type: string
+        serpapi_link:
+            type: string
+        author_id:
+            type: string
+        affiliations:
+            type: string
+        email:
+            type: string
+        thumbnail: 
+            type: string
+    Graph:
+      type: object
+      properties:
+        year:
+          type: integer
+        citations:
+          type: string
+    IndiceH:
+      type: object
+      properties:
+        indice_h:
+          type: object
+          $ref: '#/components/schemas/CitationInfo'
+    IndiceI10:
+      type: object
+      properties:
+        indice_i10:
+          type: object
+          $ref: '#/components/schemas/CitationInfo'
+    Interest:
+      type: object
+      properties:
+        title:
+          type: string
+        link:
+          type: string
+        serpapi_link:
+          type: string
+    PublicAccess:
       properties:
         link:
-          type: array
-          items:
-            $ref: '#/components/schemas/Link'
-        prism:url:
           type: string
-        dc:identifier:
+        available:
+          type: integer
+        not_available:
+          type: integer
+    SearchMetadata:
+      type: object
+      properties:
+        id:
           type: string
-        eid:
+        status:
           type: string
-        dc:title:
+        json_endpoint:
           type: string
-        dc:creator:
+        created_at:
           type: string
-        prism:publicationName:
+        processed_at:
           type: string
-        prism:issn:
+        google_scholar_author_url:
           type: string
-        prism:eIssn:
+        raw_html_file:
           type: string
-        prism:volume:
+        total_time_taken:
+          type: number
+          format: float
+    SearchParameter:
+      type: object
+      properties:
+        engine:
           type: string
-        prism:pageRange:
+        author_id:
           type: string
-        prism:coverDate:
+        hl:
           type: string
-        prism:coverDisplayDate:
-          type: string
-        prism:doi:
-          type: string
-        citedby-count:
-          type: string
-        affiliation:
-          type: array
-          items:
-            $ref: '#/components/schemas/Affiliation'
-        prism:aggregationType:
-          type: string
-        subtype:
-          type: string
-        subtypeDescription:
-          type: string
-        source-id:
-          type: string
-        openaccess:
-          type: string
-        openaccessFlag:
-          type: boolean
-        freetoread:
+    SearchResult:
+      type: object
+      properties:
+        search_metadata:
           type: object
-          properties:
-            value:
-              type: array
-              items:
-                $ref: '#/components/schemas/Value'
-              xml:
-                wrapped: false
-        freetoreadLabel:
+          $ref: '#/components/schemas/SearchMetadata'
+        search_parameters:
           type: object
-          properties:
-            value:
-              type: array
-              items:
-                $ref: '#/components/schemas/Value'
-              xml:
-                wrapped: false
-          xml:
-            wrapped: false
-      xml:
-        wrapped: false
-    Link:
-      type: object
-      properties:
-        '@ref':
-          type: string
-          xml:
-            attribute: true
-            name: ref
-        '@href':
-          type: string
-          xml:
-            attribute: true
-            name: href
-        '@type':
-          type: string
-          xml:
-            attribute: true
-            name: type
-    OpenSearchQuery:
-      type: object
-      properties:
-        '@role':
-          type: string
-          xml:
-            attribute: true
-            name: role
-        '@searchTerms':
-          type: string
-          xml:
-            attribute: true
-            name: searchTerms
-        '@startPage':
-          type: string   
-          xml:
-            attribute: true
-            name: startPage     
-      xml:
-        name: opensearch:Query
-    SearchResults:
-      type: object
-      properties:
-        opensearch:totalResults:
-          type: string
-        opensearch:startIndex:
-          type: string
-        opensearch:itemsPerPage:
-          type: string
-        opensearch:Query:
+          $ref: '#/components/schemas/SearchParameter'
+        author:
           type: object
-          $ref: '#/components/schemas/OpenSearchQuery'
-        link:
+          $ref: '#/components/schemas/Author'
+        articles:
           type: array
           items:
-            $ref: '#/components/schemas/Link'
-        entry:
+            $ref: '#/components/schemas/Article'
+        cited_by:
+          type: object
+          $ref: '#/components/schemas/CitedBy'
+        public_access:
+          type: object
+          $ref: '#/components/schemas/PublicAccess'
+        co_authors:
           type: array
           items:
-            $ref: '#/components/schemas/Entry'
-          xml:
-            wrapped: false
-      xml:
-        name: search-results
-    Value:
+            $ref: '#/components/schemas/CoAuthor'
+        serpapi_pagination:
+          type: object
+          $ref: '#/components/schemas/SerpapiPagination'
+    SerpapiPagination:
       type: object
       properties:
-        '$':
+        next:
           type: string
-          xml:
-            name: value
+
+
+
+
