@@ -254,7 +254,3 @@ components:
       properties:
         next:
           type: string
-
-
-
-
