@@ -22,7 +22,7 @@ externalDocs:
 servers:
   - url: https://serpapi.com/search.json
 tags:
-  - name: googleScholar
+  - name: googleScholarAuthorById
     description: Operations about google scholar
 paths:
   /:
@@ -56,9 +56,6 @@ paths:
           description: successful operation
           content:
             application/json:
-              schema:
-                $ref: '#/components/schemas/SearchResult'
-            application/xml:
               schema:
                 $ref: '#/components/schemas/SearchResult'
         '400':
