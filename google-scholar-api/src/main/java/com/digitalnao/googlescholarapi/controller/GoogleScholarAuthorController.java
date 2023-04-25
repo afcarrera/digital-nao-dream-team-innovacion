@@ -25,7 +25,7 @@ public class GoogleScholarAuthorController {
         String [] params = {apiKey, authorId, engine};
         SearchResultDTO searchResultDTO = this.googleScholarAuthorService.findById(params);
         AuthorDTO authorDTO = this.googleScholarAuthorService.findAuthorById(authorId);
-        if (Objects.isNull(authorDTO)){
+        if (Objects.isNull(authorDTO) && Objects.nonNull(searchResultDTO.getAuthor())){
             searchResultDTO.getAuthor().setGoogleScholarAuthorId(authorId);
             this.googleScholarAuthorService.create(searchResultDTO.getAuthor());
         }
