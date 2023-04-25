@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.digital-nao</groupId>
 	<artifactId>google-scholar-api</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<name>google-scholar-api</name>
 	<description>Project to execute google scholar operations</description>
 	<properties>
