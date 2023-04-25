@@ -1,6 +1,8 @@
 package com.digitalnao.googlescholarapi.dto;
 
 import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,9 +13,9 @@ import org.springframework.validation.annotation.Validated;
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-04-20T05:12:20.970659408Z[GMT]")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 
-
-public class AuthorDTO {
+public class AuthorDTO implements _DTOEntity {
   @JsonProperty("name")
   private String name = null;
 
@@ -28,6 +30,8 @@ public class AuthorDTO {
 
   @JsonProperty("thumbnail")
   private String thumbnail = null;
+
+  private String googleScholarAuthorId = null;
 
   public AuthorDTO name(String name) {
     this.name = name;
@@ -120,6 +124,18 @@ public class AuthorDTO {
 
   public void setThumbnail(String thumbnail) {
     this.thumbnail = thumbnail;
+  }
+
+  /**
+   * Get googleScholarAuthorId
+   * @return googleScholarAuthorId
+   **/
+  public String getGoogleScholarAuthorId() {
+    return googleScholarAuthorId;
+  }
+
+  public void setGoogleScholarAuthorId(String googleScholarAuthorId) {
+    this.googleScholarAuthorId = googleScholarAuthorId;
   }
 
 
