@@ -20,8 +20,8 @@ Ejemplo de DB_URL: //localhost:3306/google_scholar
 > git clone https://github.com/afcarrera/digital-nao-dream-team-innovacion
 > cd digital-nao-dream-team-innovacion
 > cd database
-> mysql -u root -p <CREATE_DATABASE.sql
-> mysql -u root -p <CREATE_TABLE.sql
+> mysql -u replace_with_your_db_user -p <CREATE_DATABASE.sql
+> mysql -u replace_with_your_db_user -p <CREATE_TABLE.sql
 > cd..
 > cd google-scholar-api
 > set DB_USER = your_db_user
