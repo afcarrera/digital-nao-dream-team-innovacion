@@ -1,5 +1,7 @@
 package com.digitalnao.googlescholarapi;
 
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -7,7 +9,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 class GoogleScholarApiApplicationTests {
 
 	@Test
-	void contextLoads() {
+	void contextLoads() {		
+		String nullExample = null;
+		//Check that an object is null
+		assertNull(nullExample);
 	}
 
 }
